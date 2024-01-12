@@ -6,13 +6,11 @@ import com.demo.bestjugs.model.User;
 import com.demo.bestjugs.repository.UserRepository;
 import com.demo.bestjugs.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,27 +19,26 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+
+        this.modelMapper = modelMapper;
     }
 
 
     @Override
-    public User addUser(UserDto userDto) {
+    public User createUser(UserDto userDto) {
+       User user = modelMapper.map(userDto, User.class);
+       return userRepository.save(user);
 
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
-        User user = mapper.map(userDto, User.class);
-        return userRepository.save(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-
-        ModelMapper modelMapper = new ModelMapper();
 
         return users.stream()
                 .map(user -> modelMapper.map(user, UserDto.class))
