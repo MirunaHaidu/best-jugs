@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
+
+
 
     public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
+
     }
 
     @PostMapping("/register")
