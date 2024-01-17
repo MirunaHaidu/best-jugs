@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("test_qualifier_boulderingServiceImpl")
+@Service("test_qualifier_boulderingProblemServiceImpl")
 @Transactional
 public class BoulderingProblemServiceImpl implements BoulderingProblemService {
 

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,4 +24,9 @@ public class BoulderingProblem {
     private String grade;
     @Column
     private String holds;
+    @Column
+    private LocalDate dateAdded;
+    @ManyToOne
+    @JoinColumn(name = "boulderingSession_id")
+    private BoulderingSession boulderingSession;
 }
