@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Shoe> getShoes(Long userId) {
-        List<Shoe> shoes = userRepository.findById(userId).get().getShoes();
-        return shoes;
+        return userRepository.findById(userId).get().getShoes();
     }
 }

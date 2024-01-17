@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service("test_qualifier_boulderingServiceImpl")
 @Transactional
 public class BoulderingProblemServiceImpl implements BoulderingProblemService {
@@ -25,5 +28,15 @@ public class BoulderingProblemServiceImpl implements BoulderingProblemService {
     public BoulderingProblem addProblem(BoulderingProblemDto boulderingProblemDto) {
         BoulderingProblem boulderingProblem = modelMapper.map(boulderingProblemDto, BoulderingProblem.class);
         return boulderingProblemRepository.save(boulderingProblem);
+    }
+
+    @Override
+    public List<BoulderingProblem> findByGrade(String grade) {
+        List<BoulderingProblem> boulderingProblems = boulderingProblemRepository.findAll();
+
+        return boulderingProblems.stream()
+                .filter(boulderingProblem -> boulderingProblem.getGrade().contains(grade))
+                .map(boulderingProblem -> modelMapper.map(boulderingProblem, BoulderingProblem.class))
+                .collect(Collectors.toList());
     }
 }
