@@ -2,7 +2,9 @@ package com.demo.bestjugs.service.impl;
 
 import com.demo.bestjugs.dto.UserDto;
 import com.demo.bestjugs.exception.ResourceNotFoundException;
+import com.demo.bestjugs.model.Shoe;
 import com.demo.bestjugs.model.User;
+import com.demo.bestjugs.repository.ShoeRepository;
 import com.demo.bestjugs.repository.UserRepository;
 import com.demo.bestjugs.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -20,12 +22,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final ShoeRepository shoeRepository;
 
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, ShoeRepository shoeRepository) {
         this.userRepository = userRepository;
-
         this.modelMapper = modelMapper;
+        this.shoeRepository = shoeRepository;
     }
 
 
@@ -55,5 +58,11 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+    }
+
+    @Override
+    public List<Shoe> getShoes(Long userId) {
+        List<Shoe> shoes = userRepository.findById(userId).get().getShoes();
+        return shoes;
     }
 }
