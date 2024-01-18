@@ -31,4 +31,8 @@ public class BoulderingProblem {
     @ManyToMany(mappedBy = "boulderingProblems")
     @JsonIgnore
     private List<BoulderingSession> boulderingSessions;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "gyms_id")
+    private Gym gym;
 }

@@ -13,5 +13,6 @@ public interface UserService {
     User findByUsername(String username);
     User findByEmail(String email);
     List<Shoe> getShoes(Long userId);
+    Boolean hasMembership(Long userId, Long gymId);
 
 }

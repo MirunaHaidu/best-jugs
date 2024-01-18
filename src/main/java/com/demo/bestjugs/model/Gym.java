@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,7 +22,10 @@ public class Gym {
     @Column
     private String name;
 
+    @OneToMany(mappedBy = "gym", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<BoulderingProblem> boulderingProblems = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "gym", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<Membership> memberships = new ArrayList<>();
 
 }

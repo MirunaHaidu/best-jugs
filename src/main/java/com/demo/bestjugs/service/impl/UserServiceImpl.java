@@ -64,4 +64,13 @@ public class UserServiceImpl implements UserService {
     public List<Shoe> getShoes(Long userId) {
         return userRepository.findById(userId).get().getShoes();
     }
+
+    @Override
+    public Boolean hasMembership(Long userId, Long gymId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+
+
+        return null;
+    }
 }
