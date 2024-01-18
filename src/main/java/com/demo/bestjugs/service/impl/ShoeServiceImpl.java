@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service("test_qualifier_shoeServiceImpl")
 @Transactional
 public class ShoeServiceImpl implements ShoeService {
@@ -37,6 +39,8 @@ public class ShoeServiceImpl implements ShoeService {
 
         return shoeRepository.save(shoe);
     }
+
+
 
 
 }

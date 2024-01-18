@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service("test_qualifier_boulderingSessionServiceImpl")
 @Transactional
@@ -43,9 +44,12 @@ public class BoulderingSessionServiceImpl implements BoulderingSessionService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", boulderingSessionDto.getUser().getId()));
         boulderingSession.setUser(user);
 
-        List<Long> selectedShoesIds = boulderingSessionDto.getShoes().stream()
+        List<Long> selectedShoesIds = Optional.ofNullable(boulderingSessionDto.getShoes())
+                .orElse(Collections.emptyList())
+                .stream()
                 .map(Shoe::getId)
                 .toList();
+
 
         if (selectedShoesIds.isEmpty()) {
             Shoe rentalShoes = new Shoe();
