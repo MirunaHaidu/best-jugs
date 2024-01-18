@@ -1,5 +1,6 @@
 package com.demo.bestjugs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +30,7 @@ public class Shoe {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
+    @ManyToMany(mappedBy = "shoes")
+    @JsonIgnore
+    private List<BoulderingSession> boulderingSessions;
 }

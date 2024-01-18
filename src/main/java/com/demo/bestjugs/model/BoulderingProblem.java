@@ -1,5 +1,6 @@
 package com.demo.bestjugs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "bouldering_problems")
+@Entity(name = "boulderingProblems")
 public class BoulderingProblem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,7 @@ public class BoulderingProblem {
     private String holds;
     @Column
     private LocalDate dateAdded;
-    @ManyToOne
-    @JoinColumn(name = "boulderingSession_id")
-    private BoulderingSession boulderingSession;
+    @ManyToMany(mappedBy = "boulderingProblems")
+    @JsonIgnore
+    private List<BoulderingSession> boulderingSessions;
 }

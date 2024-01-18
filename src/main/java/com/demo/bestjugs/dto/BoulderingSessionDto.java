@@ -1,6 +1,7 @@
 package com.demo.bestjugs.dto;
 
 import com.demo.bestjugs.model.BoulderingProblem;
+import com.demo.bestjugs.model.Shoe;
 import com.demo.bestjugs.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,5 @@ public class BoulderingSessionDto {
     private LocalDate date;
     private User user;
     private List<BoulderingProblem> boulderingProblems;
+    private List<Shoe> shoes;
 }

@@ -42,4 +42,8 @@ public class User {
     @JsonIgnore
     private List<Shoe> shoes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<BoulderingSession> boulderingSessions = new ArrayList<>();
+
 }

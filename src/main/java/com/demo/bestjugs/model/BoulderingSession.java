@@ -15,19 +15,24 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "bouldering_sessions")
+@Entity(name = "boulderingSessions")
 public class BoulderingSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private LocalDate date;
-    @Column
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "boulderingProblem", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinTable(name = "boulderingSession_boulderingProblem", joinColumns = @JoinColumn(name = "boulderingSession_id"), inverseJoinColumns = @JoinColumn(name = "boulderingProblem_id"))
     private List<BoulderingProblem> boulderingProblems = new ArrayList<>();
 
-    // add list of shoes -> one session, many shoes
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinTable(name = "boulderingSession_shoes", joinColumns = @JoinColumn(name = "boulderingSession_id"), inverseJoinColumns = @JoinColumn(name = "shoe_id"))
+    private List<Shoe> shoes = new ArrayList<>();
 
 }
