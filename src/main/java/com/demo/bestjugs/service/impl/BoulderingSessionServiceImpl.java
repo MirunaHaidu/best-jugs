@@ -2,15 +2,13 @@ package com.demo.bestjugs.service.impl;
 
 import com.demo.bestjugs.dto.BoulderingSessionDto;
 import com.demo.bestjugs.exception.ResourceNotFoundException;
-import com.demo.bestjugs.model.BoulderingProblem;
-import com.demo.bestjugs.model.BoulderingSession;
-import com.demo.bestjugs.model.Shoe;
-import com.demo.bestjugs.model.User;
+import com.demo.bestjugs.model.*;
 import com.demo.bestjugs.repository.BoulderingProblemRepository;
 import com.demo.bestjugs.repository.BoulderingSessionRepository;
-import com.demo.bestjugs.repository.ShoeRepository;
+import com.demo.bestjugs.repository.GymRepository;
 import com.demo.bestjugs.repository.UserRepository;
 import com.demo.bestjugs.service.BoulderingSessionService;
+import com.demo.bestjugs.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,22 +25,33 @@ public class BoulderingSessionServiceImpl implements BoulderingSessionService {
     private final BoulderingSessionRepository boulderingSessionRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final GymRepository gymRepository;
     private final BoulderingProblemRepository boulderingProblemRepository;
 
-    public BoulderingSessionServiceImpl(BoulderingSessionRepository boulderingSessionRepository, ModelMapper modelMapper, UserRepository userRepository, BoulderingProblemRepository boulderingProblemRepository) {
+
+    public BoulderingSessionServiceImpl(BoulderingSessionRepository boulderingSessionRepository, ModelMapper modelMapper, UserRepository userRepository, UserService userService, GymRepository gymRepository, BoulderingProblemRepository boulderingProblemRepository) {
         this.boulderingSessionRepository = boulderingSessionRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.gymRepository = gymRepository;
         this.boulderingProblemRepository = boulderingProblemRepository;
     }
 
 
     @Override
-    public BoulderingSession createSession(BoulderingSessionDto boulderingSessionDto) {
+    public BoulderingSession createSession(BoulderingSessionDto boulderingSessionDto, Long gymId) {
         BoulderingSession boulderingSession = modelMapper.map(boulderingSessionDto, BoulderingSession.class);
         User user = userRepository.findById(boulderingSessionDto.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", boulderingSessionDto.getUser().getId()));
         boulderingSession.setUser(user);
+
+
+        if(!userService.hasMembership(user.getId(), gymId)){
+            throw new RuntimeException("User does not have a membership at this gym");
+        }
+
 
         List<Long> selectedShoesIds = Optional.ofNullable(boulderingSessionDto.getShoes())
                 .orElse(Collections.emptyList())
@@ -67,14 +76,26 @@ public class BoulderingSessionServiceImpl implements BoulderingSessionService {
             boulderingSession.setShoes(selectedShoes);
         }
 
-        List<Long> selectedBoulderingProblemsIds = boulderingProblemRepository.findAll().stream()
+        List<Long> selectedBoulderingProblemsIds = Optional.ofNullable(boulderingSessionDto.getBoulderingProblems())
+                .orElse(Collections.emptyList())
+                .stream()
                 .map(BoulderingProblem::getId)
                 .toList();
-        List<BoulderingProblem> selectedProblems = boulderingProblemRepository.findAll().stream()
-                .filter(boulderingProblem -> selectedBoulderingProblemsIds.contains(boulderingProblem.getId()))
+
+        Gym gym = gymRepository.findById(gymId)
+                .orElseThrow(() -> new ResourceNotFoundException("Gym", "gymId", gymId));
+
+        List<BoulderingProblem> gymProblems = gym.getBoulderingProblems();
+
+        List<BoulderingProblem> selectedProblems = selectedBoulderingProblemsIds.stream()
+                .map(id -> boulderingProblemRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("BoulderingProblem", "id", id)))
+                .filter(gymProblems::contains)
                 .toList();
 
         boulderingSession.setBoulderingProblems(selectedProblems);
+
+
 
 
         return boulderingSessionRepository.save(boulderingSession);

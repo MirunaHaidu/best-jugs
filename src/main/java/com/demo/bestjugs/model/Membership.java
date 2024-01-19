@@ -24,4 +24,5 @@ public class Membership {
     @JoinColumn(name = "gym_id")
     private Gym gym;
 
+    // TODO: add logic for expiration date and renewal
 }

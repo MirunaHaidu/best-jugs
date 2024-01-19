@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "boulderingSessions")
+@Entity(name = "bouldering_sessions")
 public class BoulderingSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +27,12 @@ public class BoulderingSession {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
-    @JoinTable(name = "boulderingSession_boulderingProblem", joinColumns = @JoinColumn(name = "boulderingSession_id"), inverseJoinColumns = @JoinColumn(name = "boulderingProblem_id"))
+    @ManyToMany(cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @JoinTable(name = "bouldering_session_bouldering_problem", joinColumns = @JoinColumn(name = "bouldering_session_id"), inverseJoinColumns = @JoinColumn(name = "bouldering_problem_id"))
     private List<BoulderingProblem> boulderingProblems = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
-    @JoinTable(name = "boulderingSession_shoes", joinColumns = @JoinColumn(name = "boulderingSession_id"), inverseJoinColumns = @JoinColumn(name = "shoe_id"))
+    @JoinTable(name = "bouldering_session_shoes", joinColumns = @JoinColumn(name = "bouldering_session_id"), inverseJoinColumns = @JoinColumn(name = "shoe_id"))
     private List<Shoe> shoes = new ArrayList<>();
 
 }

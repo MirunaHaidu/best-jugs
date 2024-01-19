@@ -20,8 +20,8 @@ public class BoulderingSessionController {
     }
 
     @PostMapping("/createSession")
-    public ResponseEntity<BoulderingSession> createSession(@RequestBody @Valid BoulderingSessionDto boulderingSessionDto){
-        BoulderingSession boulderingSession = boulderingSessionService.createSession(boulderingSessionDto);
+    public ResponseEntity<BoulderingSession> createSession(@RequestBody @Valid BoulderingSessionDto boulderingSessionDto, Long gymId){
+        BoulderingSession boulderingSession = boulderingSessionService.createSession(boulderingSessionDto, gymId);
         return new ResponseEntity<>(boulderingSession, HttpStatus.CREATED);
     }
 }

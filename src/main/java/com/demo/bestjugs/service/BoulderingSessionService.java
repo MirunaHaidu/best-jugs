@@ -5,5 +5,5 @@ import com.demo.bestjugs.model.BoulderingSession;
 
 public interface BoulderingSessionService {
 
-    BoulderingSession createSession(BoulderingSessionDto boulderingSessionDto);
+    BoulderingSession createSession(BoulderingSessionDto boulderingSessionDto, Long gymId);
 }

@@ -2,19 +2,17 @@ package com.demo.bestjugs.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "boulderingProblems")
+@Entity(name = "bouldering_problems")
 public class BoulderingProblem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +33,5 @@ public class BoulderingProblem {
     @ManyToOne
     @JoinColumn(name = "gyms_id")
     private Gym gym;
+
 }
